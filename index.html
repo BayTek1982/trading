@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#05080d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trading-Tagebuch">
+<title>Bayazit Trading-Tagebuch</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📒</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080d;--card:#0f1620;--card2:#0b1118;--line:#1b2532;--txt:#dfe6ef;--mut:#7f8b9c;
+ --grn:#1fcf8f;--red:#f0605d;--gold:#f5c542;--blue:#4c9aff;--lila:#b388ff;--orange:#ff9f43;--acc:var(--grn);
+ --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);padding:18px 14px 40px;font-size:15.5px;line-height:1.5;
+ background-image:radial-gradient(900px 400px at 100% -10%,color-mix(in srgb,var(--acc) 9%,transparent),transparent 70%)}
+.wrap{max-width:1240px;margin:0 auto}
+a{color:var(--acc)}
+/* ---------- Kopf ---------- */
+header.kopf{margin-bottom:18px}
+.zurueck{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);text-decoration:none;background:var(--card);border:1px solid var(--line);padding:7px 12px;border-radius:10px;margin-bottom:16px;transition:.2s}
+.zurueck:hover{color:var(--acc);border-color:var(--acc)}
+.meta{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+h1{font-family:var(--mono);font-weight:800;font-size:1.65rem;letter-spacing:.04em;text-transform:uppercase;color:var(--acc);text-shadow:0 0 24px color-mix(in srgb,var(--acc) 35%,transparent);line-height:1.15}
+h2{font-family:var(--mono);font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+/* ---------- Navigation als Pillen ---------- */
+nav{display:flex;gap:8px;overflow-x:auto;margin:0 -14px 18px;padding:2px 14px 6px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--mut);padding:9px 14px;border-radius:12px;cursor:pointer;font-family:var(--mono);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;transition:.2s}
+nav button:hover{color:var(--txt)}
+nav button.an{color:var(--acc);border-color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,var(--card));box-shadow:0 0 18px color-mix(in srgb,var(--acc) 18%,transparent)}
+/* ---------- Karten ---------- */
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--acc);opacity:.85}
+.card h2{margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;width:90px;height:90px;right:-30px;top:-30px;border-radius:50%;background:var(--acc);opacity:.08;filter:blur(10px)}
+.kpi .l{font-family:var(--mono);font-size:.66rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.12em}
+.kpi .w{font-family:var(--mono);font-size:1.35rem;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+/* ---------- Formulare ---------- */
+.form{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+label{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+input,select,textarea{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 11px;font-size:.95rem;font-family:var(--sans);letter-spacing:0;text-transform:none;font-weight:400;transition:.2s;min-width:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 18%,transparent)}
+input[type=checkbox]{accent-color:var(--acc);width:18px;height:18px}
+textarea{min-height:70px;grid-column:1/-1}
+.full{grid-column:1/-1}
+.btn{display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--acc) 14%,var(--card));color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 60%,transparent);padding:10px 16px;border-radius:12px;font-family:var(--mono);font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:.2s}
+.btn:hover{background:color-mix(in srgb,var(--acc) 22%,var(--card));box-shadow:0 0 18px color-mix(in srgb,var(--acc) 22%,transparent)}
+.btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.btn.grau{background:var(--card2);color:var(--txt);border-color:var(--line)}
+.btn.grau:hover{border-color:var(--mut);box-shadow:none}
+.btn.rot{background:color-mix(in srgb,var(--red) 12%,var(--card));color:var(--red);border-color:color-mix(in srgb,var(--red) 55%,transparent)}
+.reihe{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.calc{display:flex;gap:8px;flex-wrap:wrap;font-size:.85rem;color:var(--mut);padding:6px 0}
+.calc span{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.calc b{color:var(--txt);font-family:var(--mono)}
+/* ---------- Tabellen ---------- */
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--mono);color:var(--mut);font-weight:700;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+td{font-variant-numeric:tabular-nums}
+tr.zeile{cursor:pointer;transition:.15s}tr.zeile:hover{background:var(--card2)}
+.scroll{overflow-x:auto}
+.up{color:var(--grn)}.down{color:var(--red)}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--card2);border:1px solid var(--line);color:var(--mut)}
+.tag.offen{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
+.tag.frei{color:var(--grn);border-color:color-mix(in srgb,var(--grn) 55%,transparent)}
+.tag.bald{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 55%,transparent)}
+canvas{width:100%;height:240px;display:block}
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.hinweis{font-size:.82rem;color:var(--mut);margin-top:10px;line-height:1.55}
+.hinweis b{color:var(--txt)}
+.leer{color:var(--mut);text-align:center;padding:26px;white-space:normal}
+.mini{font-size:.8rem;color:var(--mut)}
+.bild{max-width:100%;border-radius:12px;margin-top:8px}
+/* Infobox mit farbiger Überschrift */
+.info{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.info .k{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+/* Dialog */
+#dlg{position:fixed;inset:0;background:#000b;backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:14px;z-index:20}
+@media(min-width:700px){#dlg{align-items:center}}
+#dlg .card{max-width:640px;width:100%;max-height:88vh;overflow:auto;animation:hoch .3s ease}
+/* ---------- Animationen ---------- */
+@keyframes rein{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes hoch{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+section:not([hidden])>*,.kpis>*,.anim>*{animation:rein .45s cubic-bezier(.2,.7,.2,1) both}
+section:not([hidden])>*:nth-child(2),.kpis>*:nth-child(2),.anim>*:nth-child(2){animation-delay:.05s}
+section:not([hidden])>*:nth-child(3),.kpis>*:nth-child(3),.anim>*:nth-child(3){animation-delay:.1s}
+section:not([hidden])>*:nth-child(4),.kpis>*:nth-child(4),.anim>*:nth-child(4){animation-delay:.15s}
+section:not([hidden])>*:nth-child(5),.kpis>*:nth-child(5),.anim>*:nth-child(5){animation-delay:.2s}
+section:not([hidden])>*:nth-child(n+6),.kpis>*:nth-child(n+6),.anim>*:nth-child(n+6){animation-delay:.25s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+::selection{background:color-mix(in srgb,var(--acc) 35%,transparent)}
+
+#steuerBox td{white-space:normal}
+</style>
+</head>
+<body style="--acc:var(--grn)">
+<div class="wrap">
+<header class="kopf"><a class="zurueck" href="https://kompassapps.de">‹ Zurück</a><div class="meta" id="meta">&nbsp;</div><h1>Trading-Tagebuch</h1></header>
+<nav id="nav">
+ <button data-v="neu" class="an">➕ Neuer Trade</button>
+ <button data-v="liste">📋 Trades</button>
+ <button data-v="statistik">📊 Statistik</button>
+ <button data-v="steuer">🧾 Haltefrist & Steuer</button>
+ <button data-v="daten">💾 Sichern</button>
+</nav>
+
+<!-- NEU -->
+<section id="v-neu">
+<div class="card">
+<h2 id="f-titel">Neuen Trade erfassen</h2>
+<form id="form" class="form">
+ <label>Datum Einstieg<input type="date" name="datum" required></label>
+ <label>Wert (z. B. BTC, SoFi)<input name="wert" required list="werte" placeholder="BTC"></label>
+ <label>Markt<select name="markt"><option>Krypto</option><option>Aktie</option><option>Index</option><option>Rohstoff</option><option>Devisen</option></select></label>
+ <label>Richtung<select name="richtung"><option>Long</option><option>Short</option></select></label>
+ <label>Setup<input name="setup" list="setups" placeholder="Golden Zone"></label>
+ <label>Zeitrahmen<select name="tf"><option></option><option>15m</option><option>1h</option><option>4h</option><option>1D</option><option>1W</option></select></label>
+ <label>Einstieg (€)<input type="number" step="any" name="einstieg" required></label>
+ <label>Stop (€)<input type="number" step="any" name="stop"></label>
+ <label>Ziel (€)<input type="number" step="any" name="ziel"></label>
+ <label>Menge (Stück)<input type="number" step="any" name="menge" required></label>
+ <label>Gebühren gesamt (€)<input type="number" step="any" name="gebuehr" value="0"></label>
+ <label>Börse / Broker<input name="boerse" list="boersen" placeholder="Binance"></label>
+ <label>Datum Ausstieg<input type="date" name="datumAus"></label>
+ <label>Ausstieg (€)<input type="number" step="any" name="ausstieg"></label>
+ <label>Gefühl beim Einstieg<select name="gefuehl"><option></option><option>😎 sicher</option><option>🙂 ruhig</option><option>😬 unsicher</option><option>😤 FOMO / Rache</option></select></label>
+ <label>Regeln eingehalten?<select name="regeln"><option></option><option>Ja</option><option>Teilweise</option><option>Nein</option></select></label>
+ <textarea name="notiz" placeholder="Warum bin ich eingestiegen? Was habe ich gelernt?"></textarea>
+ <label class="full">Screenshot (optional)<input type="file" accept="image/*" id="bildInput"></label>
+ <div class="full calc" id="calc"></div>
+ <div class="full reihe">
+  <button class="btn" type="submit">💾 Speichern</button>
+  <button class="btn grau" type="button" id="abbrechen" style="display:none">Abbrechen</button>
+ </div>
+</form>
+<datalist id="setups"><option>Golden Zone</option><option>SK-System</option><option>Trendlinie</option><option>Order Block</option><option>FVG</option><option>Ausbruch</option><option>RSI überverkauft</option><option>Unterstützung</option></datalist>
+<datalist id="werte"></datalist><datalist id="boersen"><option>Binance</option><option>OKX</option></datalist>
+</div>
+</section>
+
+<!-- LISTE -->
+<section id="v-liste" hidden>
+<div class="filter" id="filter1"></div>
+<div class="card scroll"><table id="tab"></table></div>
+</section>
+
+<!-- STATISTIK -->
+<section id="v-statistik" hidden>
+<div class="filter" id="filter2"></div>
+<div class="kpis" id="kpis"></div>
+<div class="card"><h2>📈 Kontoverlauf (Summe Gewinn/Verlust)</h2><canvas id="kurve"></canvas></div>
+<div class="card scroll"><h2>🎯 Welches Setup funktioniert am besten?</h2><table id="setTab"></table></div>
+<div class="card scroll"><h2>😎 Gefühl & Regeln</h2><table id="gefTab"></table></div>
+<div class="card scroll"><h2>📅 Monate</h2><table id="monTab"></table></div>
+</section>
+
+<!-- STEUER -->
+<section id="v-steuer" hidden>
+<div class="card"><h2>⏳ Krypto-Haltefrist (1 Jahr)</h2><div class="scroll"><table id="haltTab"></table></div>
+<p class="hinweis">Gilt für Krypto, die du privat hältst: Wer länger als ein Jahr hält, verkauft in Deutschland in der Regel steuerfrei (§ 23 EStG). Bei mehreren Käufen derselben Münze rechnet das Finanzamt meist nach „zuerst gekauft, zuerst verkauft“. Hier zählt jeder Trade für sich.</p></div>
+<div class="card"><h2>🧾 Jahresübersicht</h2><div class="filter" id="filter3"></div><div id="steuerBox"></div>
+<p class="hinweis">Nur eine Übersicht, keine Steuerberatung. Krypto unter 1 Jahr: Freigrenze 1.000 € Gewinn pro Jahr und Person – liegst du darüber, ist der ganze Gewinn steuerpflichtig. Aktien & Co.: Abgeltungsteuer, Sparer-Pauschbetrag 2.000 € für Verheiratete (gemeinsam). Bei deutschen Brokern zieht die Bank die Steuer meist schon ab.</p></div>
+</section>
+
+<!-- DATEN -->
+<section id="v-daten" hidden>
+<div class="card"><h2>💾 Sicherung</h2>
+<p class="hinweis" style="margin-bottom:12px">Deine Trades sind nur in diesem Browser gespeichert. Sichere sie ab und zu als Datei – so kannst du sie auch auf ein anderes Gerät holen.</p>
+<div class="reihe">
+ <button class="btn" id="export">⬇️ Sicherung herunterladen</button>
+ <button class="btn grau" id="kopieren">📋 Als Text kopieren</button>
+ <label class="btn grau" style="flex-direction:row;color:var(--txt)">⬆️ Sicherung laden<input type="file" accept=".json,application/json" id="import" hidden></label>
+ <button class="btn grau" id="csv">📄 Als Excel-Tabelle (CSV)</button>
+</div>
+<div id="datenInfo" class="hinweis"></div>
+</div>
+<div class="card"><h2>⚠️ Alles löschen</h2><button class="btn rot" id="allesLoeschen">Alle Trades löschen</button><div id="loeschFrage"></div></div>
+</section>
+</div>
+
+<div id="dlg"><div class="card" id="dlgInhalt"></div></div>
+
+<script>
+/* ---------- Speicher (IndexedDB, Rückfall localStorage) ---------- */
+const DB={db:null,
+ async open(){return new Promise(r=>{try{const q=indexedDB.open("trading_tagebuch",1);q.onupgradeneeded=()=>q.result.createObjectStore("kv");q.onsuccess=()=>{this.db=q.result;r()};q.onerror=()=>r()}catch(e){r()}})},
+ async get(k){if(!this.db){try{return JSON.parse(localStorage.getItem("tt_"+k))}catch(e){return null}}
+  return new Promise(r=>{const q=this.db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>r(q.result??null);q.onerror=()=>r(null)})},
+ async set(k,v){if(!this.db){try{localStorage.setItem("tt_"+k,JSON.stringify(v))}catch(e){}return}
+  return new Promise(r=>{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=r;t.onerror=r})}
+};
+let trades=[],editId=null,bildDaten=null,sortKey="datum",sortAuf=false;
+const $=s=>document.querySelector(s);
+const eur=(v,d=2)=>v==null||isNaN(v)?"–":v.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d})+" €";
+const pct=v=>v==null||isNaN(v)?"–":(v>=0?"+":"")+v.toFixed(1).replace(".",",")+" %";
+const farbe=v=>v>0?"up":v<0?"down":"";
+const fdat=s=>s?new Date(s+"T12:00").toLocaleDateString("de-DE"):"–";
+const heute=()=>new Date().toISOString().slice(0,10);
+
+function rechne(t){
+ const s=t.richtung==="Short"?-1:1, e=+t.einstieg, m=+t.menge, g=+t.gebuehr||0;
+ const r={offen:!(t.ausstieg>0)};
+ if(t.stop>0) r.risiko=Math.abs(e-t.stop)*m;
+ if(t.stop>0&&t.ziel>0) r.crv=Math.abs(t.ziel-e)/Math.abs(e-t.stop);
+ if(!r.offen){
+  r.gv=(t.ausstieg-e)*m*s-g; r.gvp=(t.ausstieg-e)/e*100*s;
+  if(r.risiko) r.R=r.gv/r.risiko;
+  r.tage=Math.round((new Date(t.datumAus||heute())-new Date(t.datum))/864e5);
+ }
+ if(t.markt==="Krypto"){
+  const d=new Date(t.datum+"T12:00");d.setFullYear(d.getFullYear()+1);d.setDate(d.getDate()+1);
+  r.freiAb=d.toISOString().slice(0,10);
+  const bis=r.offen?heute():t.datumAus;
+  r.frei=bis>=r.freiAb;
+ }
+ return r;
+}
+
+/* ---------- Navigation ---------- */
+$("#nav").onclick=e=>{const b=e.target.closest("button");if(!b)return;zeige(b.dataset.v)};
+function zeige(v){document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("an",b.dataset.v===v));
+ document.querySelectorAll("section").forEach(s=>s.hidden=s.id!=="v-"+v);
+ if(v==="liste")liste();if(v==="statistik")statistik();if(v==="steuer")steuer();if(v==="daten")$("#datenInfo").textContent=trades.length+" Trades gespeichert.";
+ location.hash=v;meta()}
+
+/* ---------- Formular ---------- */
+const form=$("#form");
+function formDaten(){const f=Object.fromEntries(new FormData(form));["einstieg","stop","ziel","menge","gebuehr","ausstieg"].forEach(k=>f[k]=f[k]===""?null:+f[k]);return f}
+function vorschau(){const t=formDaten();if(!(t.einstieg>0&&t.menge>0)){$("#calc").innerHTML="";return}const r=rechne(t);
+ let h=`<span>Positionsgröße: <b>${eur(t.einstieg*t.menge)}</b></span>`;
+ if(r.risiko)h+=`<span>Risiko: <b class="down">${eur(r.risiko)}</b></span>`;
+ if(r.crv)h+=`<span>Chance/Risiko: <b>1 : ${r.crv.toFixed(2).replace(".",",")}</b></span>`;
+ if(!r.offen)h+=`<span>Ergebnis: <b class="${farbe(r.gv)}">${eur(r.gv)} (${pct(r.gvp)})</b></span>`+(r.R!=null?`<span>R: <b class="${farbe(r.R)}">${r.R.toFixed(2).replace(".",",")} R</b></span>`:"");
+ $("#calc").innerHTML=h}
+form.oninput=vorschau;
+$("#bildInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;bildDaten=await verkleinern(f,1000)};
+function verkleinern(file,max){return new Promise(res=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=img.width*sc;c.height=img.height*sc;c.getContext("2d").drawImage(img,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.75))};img.src=URL.createObjectURL(file)})}
+form.onsubmit=async e=>{e.preventDefault();const t=formDaten();
+ if(editId){const alt=trades.find(x=>x.id===editId);Object.assign(alt,t);if(bildDaten)alt.bild=bildDaten}
+ else{t.id=Date.now().toString(36);if(bildDaten)t.bild=bildDaten;trades.push(t)}
+ await DB.set("trades",trades);formLeeren();zeige("liste")};
+function formLeeren(){form.reset();form.datum.value=heute();form.gebuehr.value=0;editId=null;bildDaten=null;$("#f-titel").textContent="Neuen Trade erfassen";$("#abbrechen").style.display="none";$("#calc").innerHTML="";datalists()}
+$("#abbrechen").onclick=()=>{formLeeren();zeige("liste")};
+function bearbeiten(id){const t=trades.find(x=>x.id===id);formLeeren();editId=id;
+ for(const[k,v]of Object.entries(t))if(form[k]&&k!=="bild")form[k].value=v??"";
+ $("#f-titel").textContent="Trade bearbeiten: "+t.wert;$("#abbrechen").style.display="";vorschau();schliessen();zeige("neu")}
+function datalists(){$("#werte").innerHTML=[...new Set(trades.map(t=>t.wert))].map(w=>`<option>${w}</option>`).join("");
+ const b=new Set(["Binance","OKX",...trades.map(t=>t.boerse).filter(Boolean)]);$("#boersen").innerHTML=[...b].map(w=>`<option>${w}</option>`).join("");
+ const s=new Set(["Golden Zone","SK-System","Trendlinie","Order Block","FVG","Ausbruch","RSI überverkauft","Unterstützung",...trades.map(t=>t.setup).filter(Boolean)]);$("#setups").innerHTML=[...s].map(w=>`<option>${w}</option>`).join("")}
+
+/* ---------- Filter ---------- */
+let F={jahr:"alle",markt:"alle",status:"alle"};
+function filterLeiste(el,mitStatus){const jahre=[...new Set(trades.map(t=>t.datum.slice(0,4)))].sort().reverse();
+ el.innerHTML=`<select data-f="jahr"><option value="alle">Alle Jahre</option>${jahre.map(j=>`<option ${F.jahr===j?"selected":""}>${j}</option>`).join("")}</select>
+ <select data-f="markt"><option value="alle">Alle Märkte</option>${["Krypto","Aktie","Index","Rohstoff","Devisen"].map(m=>`<option ${F.markt===m?"selected":""}>${m}</option>`).join("")}</select>`+
+ (mitStatus?`<select data-f="status"><option value="alle">Offen & geschlossen</option><option value="offen" ${F.status==="offen"?"selected":""}>Nur offene</option><option value="zu" ${F.status==="zu"?"selected":""}>Nur geschlossene</option></select>`:"");
+ el.onchange=e=>{F[e.target.dataset.f]=e.target.value;liste();statistik()}}
+function gefiltert(){return trades.filter(t=>(F.jahr==="alle"||t.datum.startsWith(F.jahr))&&(F.markt==="alle"||t.markt===F.markt)&&(F.status==="alle"||(F.status==="offen")===rechne(t).offen))}
+
+/* ---------- Liste ---------- */
+function liste(){filterLeiste($("#filter1"),true);const L=gefiltert().map(t=>({t,r:rechne(t)}));
+ if(!L.length){$("#tab").innerHTML=`<tr><td class="leer">Noch keine Trades. Tippe auf „➕ Neuer Trade“.</td></tr>`;return}
+ const key={datum:x=>x.t.datum,wert:x=>x.t.wert,gv:x=>x.r.gv??-1e15,gvp:x=>x.r.gvp??-1e15,R:x=>x.r.R??-1e15,setup:x=>x.t.setup||""}[sortKey]||(x=>x.t.datum);
+ L.sort((a,b)=>{const A=key(a),B=key(b);return(A>B?1:A<B?-1:0)*(sortAuf?1:-1)});
+ const k=(n,l)=>`<th data-s="${n}">${l}${sortKey===n?(sortAuf?" ▲":" ▼"):""}</th>`;
+ $("#tab").innerHTML=`<tr>${k("datum","Datum")}${k("wert","Wert")}<th>L/S</th>${k("setup","Setup")}<th>Einstieg</th><th>Ausstieg</th>${k("gv","Ergebnis")}${k("gvp","%")}${k("R","R")}<th>Status</th></tr>`+
+ L.map(({t,r})=>`<tr class="zeile" data-id="${t.id}"><td>${fdat(t.datum)}</td><td><b>${t.wert}</b></td><td>${t.richtung==="Long"?"🟢 L":"🔴 S"}</td><td>${t.setup||"–"}</td><td>${eur(t.einstieg)}</td><td>${r.offen?"–":eur(t.ausstieg)}</td>
+ <td class="${farbe(r.gv)}">${r.offen?"–":eur(r.gv)}</td><td class="${farbe(r.gvp)}">${r.offen?"–":pct(r.gvp)}</td><td class="${farbe(r.R)}">${r.R!=null?r.R.toFixed(1).replace(".",","):"–"}</td>
+ <td>${r.offen?'<span class="tag offen">offen</span>':r.gv>0?"✅":"❌"}${t.bild?" 🖼️":""}</td></tr>`).join("")}
+$("#tab").onclick=e=>{const th=e.target.closest("th[data-s]");if(th){if(sortKey===th.dataset.s)sortAuf=!sortAuf;else{sortKey=th.dataset.s;sortAuf=false}liste();return}
+ const tr=e.target.closest("tr.zeile");if(tr)details(tr.dataset.id)};
+
+function details(id){const t=trades.find(x=>x.id===id),r=rechne(t);
+ $("#dlgInhalt").innerHTML=`<h2>${t.richtung==="Long"?"🟢":"🔴"} ${t.wert} · ${t.markt} · ${t.richtung}</h2>
+ <div class="calc"><span>Einstieg: <b>${eur(t.einstieg)}</b> am ${fdat(t.datum)}</span><span>Menge: <b>${(+t.menge).toLocaleString("de-DE")}</b></span>
+ ${t.stop?`<span>Stop: <b>${eur(t.stop)}</b></span>`:""}${t.ziel?`<span>Ziel: <b>${eur(t.ziel)}</b></span>`:""}${r.crv?`<span>CRV: <b>1 : ${r.crv.toFixed(2).replace(".",",")}</b></span>`:""}
+ ${r.offen?'<span class="tag offen">noch offen</span>':`<span>Ausstieg: <b>${eur(t.ausstieg)}</b> am ${fdat(t.datumAus)}</span><span>Ergebnis: <b class="${farbe(r.gv)}">${eur(r.gv)} (${pct(r.gvp)})</b></span>${r.R!=null?`<span>R: <b>${r.R.toFixed(2).replace(".",",")}</b></span>`:""}<span>Haltedauer: <b>${r.tage} Tage</b></span>`}
+ ${t.setup?`<span>Setup: <b>${t.setup}</b></span>`:""}${t.tf?`<span>Zeitrahmen: <b>${t.tf}</b></span>`:""}${t.boerse?`<span>Börse: <b>${t.boerse}</b></span>`:""}${t.gefuehl?`<span>Gefühl: <b>${t.gefuehl}</b></span>`:""}${t.regeln?`<span>Regeln: <b>${t.regeln}</b></span>`:""}
+ ${r.freiAb?`<span>Steuerfrei ab: <b>${fdat(r.freiAb)}</b></span>`:""}</div>
+ ${t.notiz?`<p style="white-space:pre-wrap;margin:8px 0">${t.notiz.replace(/</g,"&lt;")}</p>`:""}
+ ${t.bild?`<img class="bild" src="${t.bild}">`:""}
+ <div class="reihe" style="margin-top:14px"><button class="btn" onclick="bearbeiten('${t.id}')">✏️ Bearbeiten</button>
+ <button class="btn grau" onclick="schliessen()">Schließen</button><button class="btn rot" onclick="loeschen('${t.id}',this)">🗑️ Löschen</button></div>`;
+ $("#dlg").style.display="flex"}
+function schliessen(){$("#dlg").style.display="none"}
+$("#dlg").onclick=e=>{if(e.target.id==="dlg")schliessen()};
+async function loeschen(id,b){if(b.dataset.ok!=="1"){b.dataset.ok="1";b.textContent="Wirklich löschen?";return}
+ trades=trades.filter(t=>t.id!==id);await DB.set("trades",trades);schliessen();liste()}
+
+/* ---------- Statistik ---------- */
+function statistik(){filterLeiste($("#filter2"),false);
+ const Z=gefiltert().map(t=>({t,r:rechne(t)})).filter(x=>!x.r.offen).sort((a,b)=>(a.t.datumAus||"").localeCompare(b.t.datumAus||""));
+ const gew=Z.filter(x=>x.r.gv>0),ver=Z.filter(x=>x.r.gv<=0);
+ const sum=Z.reduce((a,x)=>a+x.r.gv,0),sg=gew.reduce((a,x)=>a+x.r.gv,0),sv=-ver.reduce((a,x)=>a+x.r.gv,0);
+ const Rs=Z.filter(x=>x.r.R!=null);
+ const kpi=(l,w,c="")=>`<div class="kpi"><div class="l">${l}</div><div class="w ${c}">${w}</div></div>`;
+ $("#kpis").innerHTML=kpi("Gesamt",eur(sum,0),farbe(sum))+kpi("Trefferquote",Z.length?Math.round(gew.length/Z.length*100)+" %":"–")+kpi("Trades",Z.length+" <small style='font-size:.8rem;color:var(--mut)'>("+gew.length+"✅ "+ver.length+"❌)</small>")+
+ kpi("Ø Gewinn",gew.length?eur(sg/gew.length,0):"–","up")+kpi("Ø Verlust",ver.length?eur(-sv/ver.length,0):"–","down")+kpi("Profitfaktor",sv?(sg/sv).toFixed(2).replace(".",","):"–")+
+ kpi("Ø R pro Trade",Rs.length?(Rs.reduce((a,x)=>a+x.r.R,0)/Rs.length).toFixed(2).replace(".",","):"–")+kpi("Offene Trades",gefiltert().filter(t=>rechne(t).offen).length);
+ kurve(Z);
+ const gruppe=(fn)=>{const m={};Z.forEach(x=>{const k=fn(x)||"–";(m[k]=m[k]||[]).push(x)});return Object.entries(m).map(([k,a])=>{const s=a.reduce((q,x)=>q+x.r.gv,0),w=a.filter(x=>x.r.gv>0).length;return{k,n:a.length,s,q:w/a.length*100}}).sort((a,b)=>b.s-a.s)};
+ const tab=(rows,kopf)=>`<tr><th>${kopf}</th><th>Trades</th><th>Trefferquote</th><th>Summe</th></tr>`+(rows.length?rows.map(r=>`<tr><td>${r.k}</td><td>${r.n}</td><td>${Math.round(r.q)} %</td><td class="${farbe(r.s)}">${eur(r.s,0)}</td></tr>`).join(""):`<tr><td colspan=4 class="leer">Noch keine geschlossenen Trades</td></tr>`);
+ $("#setTab").innerHTML=tab(gruppe(x=>x.t.setup),"Setup");
+ $("#gefTab").innerHTML=tab(gruppe(x=>x.t.gefuehl),"Gefühl")+tab(gruppe(x=>x.t.regeln?"Regeln: "+x.t.regeln:""),"Regeln eingehalten");
+ $("#monTab").innerHTML=tab(gruppe(x=>(x.t.datumAus||x.t.datum).slice(0,7)).sort((a,b)=>b.k.localeCompare(a.k)).map(r=>({...r,k:new Date(r.k+"-15").toLocaleDateString("de-DE",{month:"long",year:"numeric"})})),"Monat")}
+function kurve(Z){const c=$("#kurve"),d=devicePixelRatio||1,W=c.clientWidth,H=240;c.width=W*d;c.height=H*d;const g=c.getContext("2d");g.scale(d,d);g.clearRect(0,0,W,H);
+ if(Z.length<2){g.fillStyle="#7f8b9c";g.font="13px Inter,system-ui";g.fillText("Ab 2 geschlossenen Trades erscheint hier dein Verlauf.",10,30);return}
+ let s=0;const p=[0,...Z.map(x=>s+=x.r.gv)];const mn=Math.min(...p),mx=Math.max(...p),pad=30,L=60;
+ const X=i=>L+(W-L-10)*i/(p.length-1),Y=v=>pad+(H-2*pad)*(1-(v-mn)/((mx-mn)||1));
+ const F=s>=0?"#1fcf8f":"#f0605d";g.font="600 10px 'JetBrains Mono',monospace";g.strokeStyle="#1b2532";g.setLineDash([3,4]);
+ for(let i=0;i<=4;i++){const v=mn+(mx-mn)*i/4;g.beginPath();g.moveTo(L,Y(v));g.lineTo(W,Y(v));g.stroke();g.fillStyle="#7f8b9c";g.fillText(Math.round(v).toLocaleString("de-DE")+" €",2,Y(v)+4)}
+ g.strokeStyle="#f5c542";g.globalAlpha=.6;g.beginPath();g.moveTo(L,Y(0));g.lineTo(W,Y(0));g.stroke();g.globalAlpha=1;g.setLineDash([]);
+ const gr=g.createLinearGradient(0,pad,0,H);gr.addColorStop(0,F+"40");gr.addColorStop(1,F+"00");g.fillStyle=gr;g.beginPath();g.moveTo(X(0),Y(0));p.forEach((v,i)=>g.lineTo(X(i),Y(v)));g.lineTo(X(p.length-1),Y(0));g.closePath();g.fill();
+ g.save();g.shadowColor=F;g.shadowBlur=12;g.strokeStyle=F;g.lineWidth=2.5;g.beginPath();p.forEach((v,i)=>i?g.lineTo(X(i),Y(v)):g.moveTo(X(i),Y(v)));g.stroke();g.restore();
+ g.fillStyle=F;g.beginPath();g.arc(X(p.length-1),Y(s),4,0,7);g.fill();
+ const t=(s>=0?"+":"")+Math.round(s).toLocaleString("de-DE")+" €";g.font="700 11px 'JetBrains Mono',monospace";const w=g.measureText(t).width+14;const x0=Math.min(X(p.length-1)-w/2,W-w-2),y0=Math.max(4,Y(s)-30);
+ g.fillStyle="#05080d";g.strokeStyle=F;g.beginPath();g.roundRect(x0,y0,w,20,10);g.fill();g.stroke();g.fillStyle=F;g.fillText(t,x0+7,y0+14)}
+
+/* ---------- Steuer ---------- */
+let SJ=String(new Date().getFullYear());
+function steuer(){
+ const offen=trades.filter(t=>t.markt==="Krypto"&&rechne(t).offen&&t.richtung==="Long").map(t=>({t,r:rechne(t)})).sort((a,b)=>a.r.freiAb.localeCompare(b.r.freiAb));
+ $("#haltTab").innerHTML=offen.length?`<tr><th>Wert</th><th>Gekauft</th><th>Steuerfrei ab</th><th>Noch</th><th>Status</th></tr>`+offen.map(({t,r})=>{const tage=Math.ceil((new Date(r.freiAb)-new Date(heute()))/864e5);
+  return `<tr><td><b>${t.wert}</b></td><td>${fdat(t.datum)}</td><td>${fdat(r.freiAb)}</td><td>${tage>0?tage+" Tage":"–"}</td><td>${r.frei?'<span class="tag frei">✅ steuerfrei</span>':tage<=60?'<span class="tag bald">⏳ bald frei</span>':'<span class="tag">wartet</span>'}</td></tr>`}).join(""):`<tr><td class="leer">Keine offenen Krypto-Käufe (Long).</td></tr>`;
+ const jahre=[...new Set([String(new Date().getFullYear()),...trades.filter(t=>t.datumAus).map(t=>t.datumAus.slice(0,4))])].sort().reverse();
+ $("#filter3").innerHTML=`<select id="sj">${jahre.map(j=>`<option ${j===SJ?"selected":""}>${j}</option>`).join("")}</select>`;
+ $("#sj").onchange=e=>{SJ=e.target.value;steuer()};
+ const Z=trades.map(t=>({t,r:rechne(t)})).filter(x=>!x.r.offen&&(x.t.datumAus||"").startsWith(SJ));
+ const kp=Z.filter(x=>x.t.markt==="Krypto"&&!x.r.frei),kf=Z.filter(x=>x.t.markt==="Krypto"&&x.r.frei),an=Z.filter(x=>x.t.markt!=="Krypto");
+ const s=a=>a.reduce((q,x)=>q+x.r.gv,0),sp=s(kp);
+ const zeile=(l,v,z="")=>`<tr><td>${l}</td><td class="${farbe(v)}" style="text-align:right">${eur(v)}</td><td style="color:var(--mut)">${z}</td></tr>`;
+ $("#steuerBox").innerHTML=`<table>${zeile("Krypto unter 1 Jahr gehalten ("+kp.length+")",sp,sp>1000?"⚠️ über 1.000 € Freigrenze → steuerpflichtig":sp>0?"✅ unter der Freigrenze":"")}
+ ${zeile("Krypto über 1 Jahr gehalten ("+kf.length+")",s(kf),"✅ steuerfrei")}
+ ${zeile("Aktien, Indizes & Co. ("+an.length+")",s(an),"Abgeltungsteuer, meist von der Bank abgezogen")}</table>`}
+
+/* ---------- Sichern ---------- */
+function json(){return JSON.stringify({app:"trading-tagebuch",version:1,datum:new Date().toISOString(),trades},null,1)}
+function download(name,inhalt,typ){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([inhalt],{type:typ}));a.download=name;document.body.appendChild(a);a.click();a.remove();$("#datenInfo").textContent="✅ Datei heruntergeladen."}catch(e){$("#datenInfo").textContent="Herunterladen ging nicht – nutze „Als Text kopieren“."}}
+$("#export").onclick=()=>download("trading-tagebuch-"+heute()+".json",json(),"application/json");
+$("#kopieren").onclick=async()=>{try{await navigator.clipboard.writeText(json());$("#datenInfo").textContent="✅ Kopiert."}catch(e){$("#datenInfo").textContent="Kopieren nicht möglich."}};
+$("#csv").onclick=()=>{const k=["datum","wert","markt","richtung","setup","tf","einstieg","stop","ziel","menge","gebuehr","boerse","datumAus","ausstieg","gefuehl","regeln","notiz"];
+ const z=trades.map(t=>{const r=rechne(t);return[...k.map(x=>t[x]),r.gv?.toFixed(2),r.gvp?.toFixed(2)].map(v=>v==null?"":'"'+String(v).replace(/"/g,'""').replace(/\./g,typeof v==="number"?",":".")+'"').join(";")});
+ download("trades-"+heute()+".csv","﻿"+[...k,"ergebnis_eur","ergebnis_pct"].join(";")+"\n"+z.join("\n"),"text/csv")};
+$("#import").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());const neu=d.trades||[];const ids=new Set(trades.map(t=>t.id));let n=0;neu.forEach(t=>{if(!ids.has(t.id)){trades.push(t);n++}});await DB.set("trades",trades);$("#datenInfo").textContent=`✅ ${n} Trades geladen (${neu.length-n} waren schon da).`}catch(err){$("#datenInfo").textContent="❌ Datei konnte nicht gelesen werden."}};
+$("#allesLoeschen").onclick=function(){if(this.dataset.ok!=="1"){this.dataset.ok="1";this.textContent="Sicher? Nochmal tippen = alles weg";return}trades=[];DB.set("trades",trades);this.dataset.ok="";this.textContent="Alle Trades löschen";$("#datenInfo").textContent="Alles gelöscht."};
+
+/* ---------- Start ---------- */
+(async()=>{await DB.open();trades=(await DB.get("trades"))||[];meta();formLeeren();const h=location.hash.slice(1);zeige(["neu","liste","statistik","steuer","daten"].includes(h)?h:(trades.length?"liste":"neu"))})();
+addEventListener("resize",()=>{if(!$("#v-statistik").hidden)statistik()});
+function meta(){const o=trades.filter(t=>!(t.ausstieg>0)).length;setMeta(`${trades.length} TRADES · ${o} OFFEN`)}
+function setMeta(t){const m=document.getElementById("meta");if(m)m.textContent=t}
+</script>
+</body>
+</html>
