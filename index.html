@@ -5,9 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#05080d">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Trading-Tagebuch">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trading">
 <title>Bayazit Trading-Tagebuch</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📒</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <script>try{document.documentElement.dataset.thema=localStorage.getItem("kompass_thema")||"dunkel"}catch(e){}</script>
@@ -375,6 +378,8 @@ function setMeta(t){const m=document.getElementById("meta");if(m)m.textContent=t
 (function(){const b=document.getElementById("themaBtn");if(!b)return;const set=t=>{document.documentElement.dataset.thema=t;b.textContent=t==="hell"?"🌙":"☀️";b.title=t==="hell"?"Dunkel":"Hell";
  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==="hell"?"#f3f5f8":"#05080d";try{localStorage.setItem("kompass_thema",t)}catch(e){}if(window._tb)dispatchEvent(new Event("resize"))};
  set(document.documentElement.dataset.thema||"dunkel");window._tb=1;b.onclick=()=>set(document.documentElement.dataset.thema==="hell"?"dunkel":"hell")})();
+
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
 </script>
 </body>
 </html>
